@@ -30,6 +30,7 @@ Aim 3: Go over ggplot2 [Vedran Franke] (if there is time)
 ## Logistics
 The material from this session is at:
 http://compgenomr.github.io/book
+https://github.com/al2na/compgen2016
 
 The exercises are at:
 /compgen2016/day2_intro2R_Bioc/Intro2R_data/exercises
@@ -49,10 +50,10 @@ http://PollEv.com/altunaakalin
 - Click on Rstudio, click on File/New File/ R script
 - Click on Session/ set Working directory/ choose directory
 - set the working directory to "/data/compgen2016/day2_intro2R_Bioc/Intro2R_data/exercises"
-- *dir()*
+- *dir()* in R console
 - you should see:
 ```
-intro2R.exercises.htmml
+intro2R.exercises.html
 ```
 
 ## What is R?
