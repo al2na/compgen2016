@@ -755,7 +755,7 @@ If it is low, high, or medium. low < 60, high>75, medium is between 60 and 75
 use greater or less than operators <  or  > . 
 Fill in the values in the in code below, where it is written 'YOU_FILL_IN'
 
-```{r,echo=TRUE,eval=FALSE}
+```{r,echo=FALSE,eval=FALSE}
 
 GCper=65
  #result="low"# set initial value
@@ -763,8 +763,7 @@ GCper=65
   if(GCper < 60){ # check if GC value is lower than 60, assign "low" to result
     result="low"
     cat("low")
-  }
-  else if(GCper > 75){  # check if GC value is higher than 75, assign "high" to result
+  }else if(GCper > 75){  # check if GC value is higher than 75, assign "high" to result
     result="high"
     cat("high")
   }else{ # if those two conditions fail then it must be "medium"
@@ -801,8 +800,7 @@ GCclass<-function(my.gc){
   
   if(my.gc < 60){ # check if GC value is lower than 60, assign "low" to result
     result="low"
-  }
-  else if(my.gc > 75){  # check if GC value is higher than 75, assign "high" to result
+  }else if(my.gc > 75){  # check if GC value is higher than 75, assign "high" to result
     result="high"
   }else{ # if those two conditions fail then it must be "medium"
     result="medium"

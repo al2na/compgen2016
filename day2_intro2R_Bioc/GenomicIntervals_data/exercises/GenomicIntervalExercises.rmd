@@ -92,7 +92,7 @@ cpgi.gr=track(cpgi)
 query <- ucscTableQuery(session, track="RefSeq Genes",table="refGene",
         range=GRangesForUCSCGenome("mm9", "chr12"))
 ## get the GRanges object for the track
-ref.gr=track(query)
+ref.gr=track(query  )
 
 
 ```

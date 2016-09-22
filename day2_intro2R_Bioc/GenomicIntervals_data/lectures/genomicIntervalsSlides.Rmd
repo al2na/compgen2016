@@ -75,7 +75,7 @@ Session objectives:
 </div>
 - type *dir()*, you should see:
 ```
-GenomicIntervalExercises.htmml
+GenomicIntervalExercises.html
 ```
 
 

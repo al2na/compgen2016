@@ -33,7 +33,7 @@ http://compgenomr.github.io/book
 https://github.com/al2na/compgen2016
 
 The exercises are at:
-/compgen2016/day2_intro2R_Bioc/Intro2R_data/exercises
+/data/compgen2016/day2_intro2R_Bioc/Intro2R_data/exercises
 
 
 Live notes are at:

@@ -1,0 +1,166 @@
+---
+title: "Tumor subtype prediction exercise"
+author: "Altuna Akalin"
+date: "September 21, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/aakalin/Dropbox/PAPERS/R-devel/compgen2016/")
+```
+
+## Aims
+
+We provide patient data from TCGA with various molecular profiles: 
+methylation, gene expression (RNA-seq) and copy-number variation. In 
+addition, for each patient we provide the subtype data, simplified as 
+"A" and "B". The general aim is to come up with a randomForest 
+classifier that can distinguish subtype from molecular profiles using  
+the `randomForest` package at CRAN. The predictors or features will be 
+genes and/or CpGs and the response variable will be subtype information.
+
+__Specific aims:__
+
+- One of the molecular profiles can provide classification with
+  no error (perfect separation). Which one is it? Why do you think
+  it provides perfect separation when used (think about cancer biology and driver mutations)?
+- Make a classifier with minimum error using the least amount of 
+  features/predictors, but do not use the molecular profile that provides
+  perfect classification with default arguments of randomForest.__ So, for the final classifier you will be using 2 out of 3 data sets.__
+- Which features are the most predictive of the subtype. Are they
+  involved in cancer in any way (look at publications, databases, etc.) ?
+
+### Competition 
+
+- This exercise is a team exercise. __The team that accomplishes all the aims above and finally produces the least OOB (out-of-the-bag) error from
+the randomForest function wins__. Since there is bootstrap sampling involved when calculating OOB error, __run the final model 5 times__ and take the average of the OOB errors.
+- In case of a tie, the team that produces a model with the least  
+amount of predictors wins. The number of predictors are defined by column
+number of data set input into the randomForest function.
+- The least computationally experienced person in the winning team 
+will walk us through the code. Make sure everybody understands
+the final code in your team.
+- This is similar to situations you might encounter during your work.
+  In real life, you have 
+  only google and your colleagues. Try to figure things out within 
+  your own group.
+- Identify the molecular profile that can provide perfect or near 
+perfect separation with default randomForest arguments and DO NOT use that molecular profile for the final
+classifier. This requires that you fit randomForest models for each molecular profile separately at first as suggested below.
+- __By 11am the code that gives the best results should be online 
+on the team specific beta.etherpad.org page or somewhere similar.__
+
+  
+
+
+
+## Files
+
+#### methylation file
+The methylation file comes with pre-filtered CpGs and their
+methylation values across patients.
+```{r,eval=FALSE}
+meth=readRDS("/data/compgen2016/day10_projectDay/methylation.rds")
+meth$dat[1:5,1:5]
+meth$cpgs[1:5,]
+```
+
+```{r,echo=FALSE}
+meth=readRDS("day10_projectDay/methylation.rds")
+meth$dat[1:5,1:5]
+meth$cpgs[1:5,]
+```
+#### expression file
+The expression file contain normalized rpkm values per patient for
+~20k genes.
+```{r,eval=FALSE}
+exp=readRDS("/data/compgen2016/day10_projectDay/rnaseq.rds")
+exp$dat[1:5,1:5]
+```
+
+```{r,echo=FALSE}
+exp=readRDS("day10_projectDay/rnaseq.rds")
+exp$dat[1:5,1:5]
+```
+
+#### copy-number variation file
+The copy-number variation file contain the log-ratio of copy number between cancer samples to normal samples. Thus, a positive log-ratio indicates a copy number gain and negative value indicates a DNA copy number loss.
+```{r,eval=FALSE}
+cna=readRDS("/data/compgen2016/day10_projectDay/cna.rds")
+cna$dat[1:5,1:5]
+```
+
+```{r,echo=FALSE}
+cna=readRDS("day10_projectDay/cna.rds")
+cna$dat[1:5,1:5]
+```
+
+#### patient-subtype annotation
+The patient-subtype annotation file contains patient ids in row names 
+and subtype classification in column 1, either A or B. This is the
+the response variable we are trying to predict, you can use this
+as the `y` argument in the randomForest function, but make sure 
+the patient id order matches to the order of patient ids in the 
+predictors object (a matrix or data frame). 
+
+```{r,eval=FALSE}
+pat=readRDS("/data/compgen2016/day10_projectDay/patient2subtypes.rds")
+head(pat)
+pat[1:5,,drop=FALSE]
+```
+
+```{r,echo=FALSE}
+pat=readRDS("day10_projectDay/patient2subtypes.rds")
+head(pat)
+pat[1:5,,drop=FALSE]
+```
+
+
+## Suggested strategies and hints
+
+- Filter the data, use most variable predictors (these are either genes 
+or CpGs). __HINT:__  matrixStats package has colVars or rowVars 
+functions that can get variation information per column or row. 
+Alternatively, you can do this using `apply()`.
+- Make a different classifier for each data type, get the most
+  useful predictors (see `?randomForest::varImpPlot`), and make a final classifier using the best
+  attributes from all the data sets. Although, there is no guarantee
+  that the best classifier will need to use features from all the
+  molecular profiles.
+- In order to merge the subtype annotation file with molecular profile
+  data you may need to use `merge()` and `t()` functions. `t()` 
+  transposes a matrix or data frame, and `merge(...,by="row.names")`
+  can merge two data frames or objects coercible to data frames by  
+  their row names.
+- You can divide the tasks between team members. While one is trying to
+  figure out how to use randomForest, the others can work on filtering
+  data sets.
+- Use http://beta.etherpad.org or similar services to share
+  live notes and code among team members. The final code that does the filtering and model building should be shared via the same platform to 
+  be inspected.
+
+#### info on random forests
+install the package using `install.packages("randomForest")` and
+run `?randomForest` to see the help page and then run the examples. OOB error is an output from the `randomForest` function.
+
+understanding decision trees (building blocks of random forests): http://www.r2d3.us/visual-intro-to-machine-learning-part-1/
+
+layman's intro to random forests:
+http://blog.echen.me/2011/03/14/laymans-introduction-to-random-forests/
+
+Simple explanation of random forests: http://www.listendata.com/2014/11/random-forest-with-r.html
+
+Detailed explanation by the developers:
+https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
+
+```{r,echo=F,eval=F}
+d=merge(pat,t(meth$dat),by="row.names")
+
+dat=as.matrix(d[,-c(1,2)])
+rf=randomForest(dat[,colVars(dat) > quantile(colVars(dat),p=0.90) ])
+MDSplot(rf,d$subtype)
+```
+
+
+
